@@ -1,6 +1,6 @@
 var express = require("express"),
 	app = express(),
-	port = 3700,
+	port = process.env.PORT || 3700,
 	//Table = require('./table.js'),
 	tables = {};
 	cashs = {};
