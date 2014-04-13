@@ -1,11 +1,30 @@
 {
-    "name": "VirtualPokerChip",
-    "version": "0.0.0",
-    "description": "Real time web chat",
-    "dependencies": {
-        "socket.io": "latest",
-        "express": "latest",
-        "jade": "latest",
-    },
-    "author": "developer"
+  "name": "chipcounter",
+  "version": "0.0.0",
+  "description": "a virtual chip counter",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.0.0",
+    "jade": "^1.3.1",
+    "socket.io": "^0.9.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/expiredtofu/chipcounter.git"
+  },
+  "keywords": [
+    "chip",
+    "poker",
+    "counter"
+  ],
+  "author": "Sheng Jiang, Mark Qi, Jesse Zhao",
+  "license": "all rights reserved",
+  "bugs": {
+    "url": "https://github.com/expiredtofu/chipcounter/issues"
+  },
+  "homepage": "https://github.com/expiredtofu/chipcounter"
 }
