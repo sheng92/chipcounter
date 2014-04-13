@@ -159,11 +159,12 @@ window.onload = function() {
         if (IsNumberOnly(chips)){
             var chipsbet = parseFloat(chips.value);
             socket.emit('tablesend', { loc: currTable, message: name.value + ' placed a bet of ' + chipsbet.toString()});
+            socket.emit('makeBet', {username: name.value, message: chipsbet, loc: currTable});
         } else {
             alert("Please type in a valid number.");
         }
         chips.value = "";
-        socket.emit('makeBet', {username: name.value, message: chipsbet, loc: currTable});
+        
     }
 
     setwinnerButton.onclick = setWinner = function() {
