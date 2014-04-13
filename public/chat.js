@@ -15,11 +15,11 @@ window.onload = function() {
     var chips = document.getElementById("chips");
     var cashflow = document.getElementById("cashflow");
     var superuser = document.getElementById("superuser");
-    var initialcash = document.getElementById("initialcash");
-    var setcashButton = document.getElementById("setinitcash");
+    // var initialcash = document.getElementById("initialcash");
+    // var setcashButton = document.getElementById("setinitcash");
     var winnername = document.getElementById("winnername");
     var winnings = document.getElementById("winnings");
-    var setwinner = document.getElementById("setwinner");
+    var setwinnerButton = document.getElementById("setwinner");
     
 
     leaveButton.disabled = true;
@@ -94,7 +94,7 @@ window.onload = function() {
                 html += '<h3>Current Jackpot: ' + jackpots[j] + '</h3>';
             }
 
-            if (players[currTable] == name.value){
+            if (players[currTable][0] == name.value){
                 superuser.style.display = 'inline';
             }
             else { superuser.style.display = 'none';}
@@ -158,7 +158,7 @@ window.onload = function() {
 
         if (IsNumberOnly(chips)){
             var chipsbet = parseFloat(chips.value);
-            socket.emit('send', { message: name.value + ' placed a bet of ' + chipsbet.toString()});
+            socket.emit('tablesend', { loc: currTable, message: name.value + ' placed a bet of ' + chipsbet.toString()});
         } else {
             alert("Please type in a valid number.");
         }
@@ -166,14 +166,17 @@ window.onload = function() {
         socket.emit('makeBet', {username: name.value, message: chipsbet, loc: currTable});
     }
 
-
-    // $(document).ready(function() {
-    //     $("#field").keyup(function(e) {
-    //         if(e.keyCode == 13) {
-    //             sendMoney();
-    //         }
-    //     });
-    // });
+    setwinnerButton.onclick = setWinner = function() {
+        if (winnername.value == ''){
+            alert("Please choose a winner");
+        } else if (winnings.value != ''){
+            if (IsNumberOnly(winnings)){
+                socket.emit('decideWinner', {username: winnername.value, loc: currTable, message: parseFloat(winnings.value)})
+            }
+        } else {
+            alert("Please choose a valid number");
+        }
+    }
 
 }
 
