@@ -38,12 +38,14 @@ io.sockets.on('connection', function (socket) {
 		var table = [];
 		var cash = [];
 		var player = [];
+		var jackpot = 0;
 		var username = data.username;
 		var tablename = data.message;
 		if (typeof tables[tablename] !== "undefined"){
 			table = tables[tablename];
 			cash = cashs[tablename];
 			player = players[tablename];
+			jackpot = jackpots[tablename];
 			//table.push(tablename);
 			cash.push(200);
 			player.push(username);
@@ -51,8 +53,9 @@ io.sockets.on('connection', function (socket) {
 			table = [tablename];
 			cash = [200];
 			player = [username];
+			jackpot = 0;
 		}
-		jackpots[tablename] = 0;
+		jackpots[tablename] = jackpot;
 		tables[tablename] = table;
 		cashs[tablename] = cash;
 		players[tablename] = player;
@@ -68,17 +71,6 @@ io.sockets.on('connection', function (socket) {
 				}
 			}
 		}
-		// var j = -1;
-		// for (var i = 0; i < tables.length; i++){
-		// 	if (tables[i].name == data.message){
-		// 		j = i;
-		// 	}
-		// }
-		// if (j > -1){
-		// 	tables[j].removePlayer(data.username);
-		// 	if (tables[j].players.length < 1){
-		// 		tables.remove(j);
-		// 	}
 		if (j != ""){
 			delete tables[j];
 			delete players[j];
@@ -98,17 +90,35 @@ io.sockets.on('connection', function (socket) {
 			}
 			if (ind > -1){
 				var bet = parseFloat(data.message);
-				if (bet > cashs[data.loc][key]){
+				if (bet > cashs[data.loc][ind]){
 					socket.emit('message', { message: 'bet could not be made. Try again.' });
 				}
 				else{
-					cashs[data.loc][key] = cashs[data.loc][key] - bet;
+					cashs[data.loc][ind] = cashs[data.loc][ind] - bet;
 					jackpots[data.loc] += bet;
 				}
 			}
 		}
 		io.sockets.emit('giveTable', {usernames:players, cashs:cashs, tables:tables, jackpots:jackpots});
 		writeToFile();
+	});
+	socket.on('decideWinner', function(data){
+		if (typeof tables[data.loc] != 'undefined'){
+			ind = -1;
+			for (key in players[data.loc]){
+				if (players[data.loc][key] == data.username){
+					ind = key;
+				}
+			}
+			if (ind > -1){
+				if (jackpots[data.loc] >= data.message){
+					jackpots[data.loc] += -1*data.message;
+					cashs[data.loc][ind] += data.message;
+					io.sockets.emit('tableMessage', {loc: data.loc, message: data.username + " wins the round, earning $" + data.message})
+					io.sockets.emit('giveTable', {usernames:players, cashs:cashs, tables:tables, jackpots:jackpots});
+				}
+			}
+		}
 	});
 
 });
