@@ -1,7 +1,7 @@
 window.onload = function() {
 
     var messages = [];
-    var table = '';
+    var currTable = '';
     var socket = io.connect('http://localhost:3700');
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
@@ -14,13 +14,20 @@ window.onload = function() {
     var betButton = document.getElementById("bet");
     var chips = document.getElementById("chips");
     var cashflow = document.getElementById("cashflow");
+    var superuser = document.getElementById("superuser");
+    var initialcash = document.getElementById("initialcash");
+    var setcashButton = document.getElementById("setinitcash");
+    var winnername = document.getElementById("winnername");
+    var winnings = document.getElementById("winnings");
+    var setwinner = document.getElementById("setwinner");
+    
 
     leaveButton.disabled = true;
 
 
     socket.on('message', function (data) {
         if(data.message) {
-            if (table == ''){
+            if (currTable == ''){
                 messages.push(data);
                 var html = '';
                 for(var i=0; i<messages.length; i++) {
@@ -36,7 +43,7 @@ window.onload = function() {
     });
 
     socket.on('tableMessage', function(data){
-        if (data.loc == table){
+        if (data.loc == currTable){
             messages.push(data);
             var html = '';
             for(var i=0; i<messages.length; i++) {
@@ -50,7 +57,7 @@ window.onload = function() {
 
     socket.on('joinedTable', function (data){
         if (field.value == data.username){
-            table = data;
+            currTable = data.message;
         }
     });
 
@@ -59,7 +66,8 @@ window.onload = function() {
         var tables = data.tables;
         var players = data.usernames;
         var cashs = data.cashs;
-        if (table == ''){
+        console.log(currTable);
+        if (currTable == ''){
             html += '<p><b>Currently Open Tables</b></p><ul>';
             var i = 0;
             for (var key in tables){
@@ -71,12 +79,12 @@ window.onload = function() {
             var j = "";
             var i = 0;
             for (var key in tables){
-                if (table == tables[key]){
+                if (currTable == tables[key]){
                     j = key;
                 }
             }
             if (j != ""){
-                html += '<p><b>Players in ' + table + ':</b></p><ul>';
+                html += '<p><b>Players in ' + currTable + ':</b></p><ul>';
                 var players = tables[j];
                 var cash = tables[j];
                 for (var key in players){
@@ -85,7 +93,6 @@ window.onload = function() {
                 html += '</ul>'
             }
         }
-        console.log(list);
         list.innerHTML = html;
     });
 
@@ -94,11 +101,11 @@ window.onload = function() {
             alert("Please type your name!");
         } else if (IsLettersOnly(name)) {
             var text = field.value;
-            if (table==''){
+            if (currTable==''){
                 socket.emit('send', { message: text, username: name.value});
             }
             else{
-                socket.emit('tablesend', { message: text, username: name.value, loc: table})
+                socket.emit('tablesend', { message: text, username: name.value, loc: currTable})
             }
             field.value = "";
         } else {
@@ -123,9 +130,9 @@ window.onload = function() {
 
     leaveButton.onclick = leaveTable = function() {
         
-        messages.push({message: name.value + " has left " + table});
+        messages.push({message: name.value + " has left " + currTable});
         socket.emit('leaveTable', {message: tablename.value, username: name.value});
-        table = '';
+        currTable = '';
         var html = '';
         for(var i=0; i<messages.length; i++) {
             html += '<b>' + (messages[i].username ? messages[i].username : 'Server') + ': </b>';

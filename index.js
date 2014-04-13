@@ -23,6 +23,7 @@ io.set('log level', 2);
 
 io.sockets.on('connection', function (socket) {
 	socket.emit('message', { message: 'welcome to the chat' });
+	io.sockets.emit('giveTable', {usernames:players, cashs:cashs, tables:tables});
 	socket.on('send', function (data) {
 		io.sockets.emit('message', data);
 	});
@@ -31,6 +32,7 @@ io.sockets.on('connection', function (socket) {
 	});
 	socket.on('makeTable', function (data) {
 		io.sockets.emit('message', {message: data.username + ' joined ' + data.message});
+		io.sockets.emit('joinedTable', {message: data.message, username: data.username});
 		var table = [];
 		var cash = [];
 		var player = [];
@@ -51,8 +53,8 @@ io.sockets.on('connection', function (socket) {
 		tables[tablename] = table;
 		cashs[tablename] = cash;
 		players[tablename] = player;
-		socket.emit('joinedTable', {message: data.message, username: data.username});
-		socket.emit('giveTable', {usernames:players, cashs:cashs, tables:tables});
+		
+		io.sockets.emit('giveTable', {usernames:players, cashs:cashs, tables:tables});
 	});
 	socket.on('leaveTable', function (data) {
 		var j = "";
@@ -81,12 +83,21 @@ io.sockets.on('connection', function (socket) {
 		} else{
 			console.log("error removing player");
 		}
-		socket.emit('giveTable', {usernames:players, cashs:cashs, tables:tables});
+		io.sockets.emit('giveTable', {usernames:players, cashs:cashs, tables:tables});
 	});
 	socket.on('makeBet', function (data) {
-		socket.emit('giveTable', {usernames:players, cashs:cashs, tables:tables});
+		io.sockets.emit('giveTable', {usernames:players, cashs:cashs, tables:tables});
+		writeToFile();
 	});
 
 });
 
 console.log("Listening on port " + port);
+
+function writeToFile() {
+	var fs = require('fs');
+	var file = fs.createWriteStream('playerVars.txt');
+	file.on('error', function(err) { /* error handling */ });
+	for (key in players) { file.write(players[key] + ', ' + cashs[key] + '\n'); };
+	file.end;
+}

@@ -26,7 +26,7 @@ html
 				input#chips(style='width: 40%', onkeypress='if(event.keyCode==13) {javascript:makeBet();}')
 				input#bet(style='margin: 2px 0 0 1%', type='submit', value='bet')
 			#superuser(style='width:100%; float:left; clear: both; display: none;') Host Options:
-				#setinitialcash(style='width:30%; float:left; clear:both;') Set Initial Cash:
+				#initialcashs(style='width:30%; float:left; clear:both;') Set Initial Cash:
 					br
 					input#initialcash(style='width: auto', onkeypress='if(event.keyCode==13) {javascript:setInitialCash();}')
 					input#setinitcash(style='margin: 2px 0 0 1%', type='submit', value='initialcash')
@@ -36,4 +36,4 @@ html
 				#choosewinnings(sytel='width:40%; float:left;') Choose Winning Amount:
 					br
 					input#winnings(style='width:80%', onkeypress='if(event.keyCode==13) {javascript:setWinner();}')
-					input#setinitcash(style='margin: 2px 0 0 1%', type='submit', value='setwinner')
+					input#setwinner(style='margin: 2px 0 0 1%', type='submit', value='setwinner')
