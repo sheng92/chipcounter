@@ -2,7 +2,7 @@ window.onload = function() {
 
     var messages = [];
     var currTable = '';
-    var socket = io.connect('http://shielded-meadow-6075.herokuapp.com/');
+    var socket = io.connect('http://chipcounter.herokuapp.com/');
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
     var tableButton = document.getElementById("maketable")
