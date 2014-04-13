@@ -66,34 +66,41 @@ window.onload = function() {
         var tables = data.tables;
         var players = data.usernames;
         var cashs = data.cashs;
+        var jackpots = data.jackpots;
         console.log(currTable);
         if (currTable == ''){
+            superuser.style.display = 'none';
             html += '<p><b>Currently Open Tables</b></p><ul>';
             var i = 0;
             for (var key in tables){
-                html += '<li>' + tables[key] + '<ul><li>hosted by: ' + players[key][0] + '</li></ul></li>';
+                html += '<li>' + tables[key] + '<ul><li>hosted by: ' + players[key][0] + '</li><li>jackpot of: ' + jackpots[key] +  '</ul></li>';
                 i++;
             }
             html += '</ul>'
         } else {
             var j = "";
             var i = 0;
-            for (var key in tables){
-                if (currTable == tables[key]){
-                    j = key;
-                }
+            if (typeof tables[currTable] != 'undefined'){
+                j = currTable;
             }
             if (j != ""){
                 html += '<p><b>Players in ' + currTable + ':</b></p><ul>';
-                var players = tables[j];
-                var cash = tables[j];
-                for (var key in players){
-                    html += '<li>' + players[key] + '<ul><li>$' + cashs[key] + '</li></ul></li>'; 
+                var player = players[j];
+                var cash = cashs[j];
+                for (var key in player){
+                    html += '<li>' + player[key] + '<ul><li>$' + cash[key] + '</li></ul></li>'; 
                 }
-                html += '</ul>'
+                html += '</ul>';
+                html += '<h3>Current Jackpot: ' + jackpots[j] + '</h3>';
             }
+
+            if (players[currTable] == name.value){
+                superuser.style.display = 'inline';
+            }
+            else { superuser.style.display = 'none';}
         }
         list.innerHTML = html;
+
     });
 
     sendButton.onclick = sendMoney = function() {
@@ -120,6 +127,7 @@ window.onload = function() {
         } else if (tablename.value == "" && IsLettersOnly(tablename) == false){
             alert("Please type a valid table name (letters only).")
         } else {
+            currTable = tablename.value;
             socket.emit('makeTable', { message: tablename.value, username: name.value });
             name.disabled = true;
             tablename.disabled = true;
@@ -155,7 +163,7 @@ window.onload = function() {
             alert("Please type in a valid number.");
         }
         chips.value = "";
-        socket.emit('makeBet', {username: name.value, message: chipsbet});
+        socket.emit('makeBet', {username: name.value, message: chipsbet, loc: currTable});
     }
 
 

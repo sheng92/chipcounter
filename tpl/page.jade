@@ -25,15 +25,18 @@ html
 				br
 				input#chips(style='width: 40%', onkeypress='if(event.keyCode==13) {javascript:makeBet();}')
 				input#bet(style='margin: 2px 0 0 1%', type='submit', value='bet')
-			#superuser(style='width:100%; float:left; clear: both; display: none;') Host Options:
+			#superuser(style='width:100%; float:left; clear: both; display: none; clear:both;') Host Options:
+				br
 				#initialcashs(style='width:30%; float:left; clear:both;') Set Initial Cash:
 					br
 					input#initialcash(style='width: auto', onkeypress='if(event.keyCode==13) {javascript:setInitialCash();}')
-					input#setinitcash(style='margin: 2px 0 0 1%', type='submit', value='initialcash')
-				#choosewinner(style='width:40%; float:left; clear:both;') Choose a Winner:
-					br
-					input#winnername(style='width:100%')
-				#choosewinnings(sytel='width:40%; float:left;') Choose Winning Amount:
-					br
-					input#winnings(style='width:80%', onkeypress='if(event.keyCode==13) {javascript:setWinner();}')
-					input#setwinner(style='margin: 2px 0 0 1%', type='submit', value='setwinner')
+					input#setinitcash(style='margin: 2px 0 0 1%', type='submit', value='initial cash')
+				.clear(style = "clear:both")
+					#choosewinner(style='width:40%; float:left; clear:both;') Choose a Winner:
+						br
+						input#winnername(style='width:100%')
+					#choosewinnings(style='width:40%; float:left; margin-left: 10%;')
+						| Choose Winning Amount:
+						br
+						input#winnings(style='width:20%;', onkeypress='if(event.keyCode==13) {javascript:setWinner();}')
+						input#setwinner(style='margin: 2px 0 0 1%', type='submit', value='set winner')
