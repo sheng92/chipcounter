@@ -1,0 +1,28 @@
+doctype
+html
+	head
+		title= "ChipCounter"
+		script(src='/chat.js')
+		script(src='/socket.io/socket.io.js')
+		script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+	body
+		#content(style='width: auto; height: 300px; margin: 0 20%; border: solid 0px #999;')
+			#board(style='width: 60%; float: left; height: 300px; border: solid 1px #999; overflow-y: scroll;')
+			#list(style='margin-left: 60%; height: 300px; border: solid 1px #999; overflow-y: scroll;')
+		.controls(style='width: auto; margin: 0 20%; clear:both;')
+			#id(style='width: 20%; float: left; margin-right: 5%') Name:
+				input#name(style='width: 100%')
+			#input(style='width: 75%; float: left') chat:
+				br
+				input#field(style='width: 80%; float: left', onkeypress='if(event.keyCode==13) {javascript:sendMoney();}')
+				input#send(style='float: left; margin: 2px 2% 0', type='submit', value='send')
+			#tabling(style='width: 100%; float: left; margin-right: 5%') Enter a table:
+				br
+				input#tablename(style='width: 40%', onkeypress='if(event.keyCode==13) {javascript:makeTable();}')
+				input#maketable(style='margin: 2px 0 0 1%', type='submit', value='make')
+				input#leavetable(style='margin: 2px 0 0 1%,', type='submit', value='leave')
+			#cashflow(style='width:100%; float:left; clear: both; display: none;') Place a bet:
+				br
+				input#chips(style='width: 40%', onkeypress='if(event.keyCode==13) {javascript:makeBet();}')
+				input#bet(style='margin: 2px 0 0 1%', type='submit', value='bet')
+				
