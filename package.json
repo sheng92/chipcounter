@@ -6,7 +6,6 @@
         "socket.io": "latest",
         "express": "latest",
         "jade": "latest",
-        "node-uuid": "latest"
     },
     "author": "developer"
 }
